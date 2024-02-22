@@ -1,24 +1,30 @@
-using System.Web.Http.Cors;
+using System.Collections;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using SRMWebApiApp.Data;
-using SRMWebApiApp.Models;
+using SRMWebApiApp.Dtos;
+using SRMWebApiApp.Services;
 
 namespace SRMWebApiApp.Controllers{
 
     [Route("api/[controller]")]
     [ApiController]
     public class EquityController : ControllerBase{
-        private readonly IVP_3308_v3Context _context;
 
-        public EquityController(IVP_3308_v3Context context){
-            _context = context;
+        private readonly IEquityService _equityService;
+        public EquityController(IEquityService equityService)
+        {
+            _equityService = equityService;
         }
 
+
         [HttpGet]
-        public async Task<ActionResult<List<SecuritySummary>>> GetAllSecurities(){
-            var securities = await _context.SecuritySummaries.ToListAsync();
-            return Ok(securities);
+        public async Task<ActionResult> GetEquityData(){
+            try{
+                var result = await _equityService.GetEquityData();
+                return Ok(result);
+            } catch(Exception e){
+                return BadRequest(e.Message);
+            }
+            
         }
 
     }

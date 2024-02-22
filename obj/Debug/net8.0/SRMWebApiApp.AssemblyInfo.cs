@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SRMWebApiApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+300758cbd18aa9894c480744a0aa4d9355e76177")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+468bc5a98f81851743b42642ddbcdd935d163a38")]
 [assembly: System.Reflection.AssemblyProductAttribute("SRMWebApiApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SRMWebApiApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

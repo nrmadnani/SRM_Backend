@@ -1,6 +1,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using SRMWebApiApp.Data;
+using SRMWebApiApp.Services;
 
 namespace SRMWebApiApp;
 
@@ -21,6 +22,9 @@ public class Program
                                 .AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod();
                             });
         });
+        // dependency injection 
+        builder.Services.AddScoped<IEquityService, EquityServiceImpl>();
+        
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
