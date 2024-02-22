@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "t0ST8hIhyx7aUbhmvmDHB1GaYz1ZT1cDHzJCF1KYa7s=",
+  "Source": "SRMWebApiApp",
+  "BasePath": "_content/SRMWebApiApp",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
