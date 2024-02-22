@@ -7,5 +7,7 @@ namespace SRMWebApiApp.Dtos {
             public double? SharesOutstanding { get; set; }
             public double? OpenPrice { get; set; }
             public double? ClosePrice { get; set; }
+            public DateOnly? DeclaredDate { get; set; }
+            public string? PFCreditRating { get; set; }
         }
 }

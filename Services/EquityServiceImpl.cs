@@ -12,7 +12,7 @@ namespace SRMWebApiApp.Services {
 
         async Task<IEnumerable<EquityDto>> IEquityService.GetEquityData()
         {
-             var data1 =   await _context.SecuritySummaries
+             var SecuritySummariesData =   await _context.SecuritySummaries
                             .Where(s => s.IsActive.Equals(true))
                             .Select(s => new SecuritySummaryDto(){
                                 SID = s.SID,
@@ -21,35 +21,51 @@ namespace SRMWebApiApp.Services {
                             })
                             .ToListAsync();
 
-            var data2 = await _context.SecurityDetailsEquities
+            var SecurityDetailsEquitiesData = await _context.SecurityDetailsEquities
                             .Select(s => new SecurityDetailsEquityDto(){
                                 SID = s.SID,
                                 PriceCurrency = s.PriceCurrency,
                                 SharesOutstanding = s.SharesOutstanding
                             }).ToListAsync();
             
-            var data3 = await _context.PricingDetails
+            var PricingDetailsData = await _context.PricingDetails
                             .Select(p => new PricingDetailsDto(){
                                 SID = p.SID,
                                 OpenPrice = p.OpenPrice,
                                 ClosePrice = p.ClosePrice
                             }).ToListAsync();
 
+            var DividendHistoriesData = await _context.DividendHistories
+                            .Select(d => new DividendHistoryDto(){
+                                SID = d.SID,
+                                DeclaredDate = d.DeclaredDate
+                            }).ToListAsync();
+            
+            var RegulatoryDetailsData = await _context.RegulatoryDetails
+                            .Select(r => new RegulatoryDetailDto(){
+                                PFId = r.PFId,
+                                PFCreditRating = r.PFCreditRating
+                            }).ToListAsync();
 
           var query = 
-                            from d1 in data1
-                            join d2 in data2 
+                            from d1 in SecuritySummariesData
+                            join d2 in SecurityDetailsEquitiesData
                             on d1.SID equals d2.SID
-                            join d3 in data3
+                            join d3 in PricingDetailsData
                             on d1.SID equals d3.SID
+                            join d4 in DividendHistoriesData
+                            on d1.SID equals d4.SID
+                            join d5 in RegulatoryDetailsData
+                            on d1.SID equals d5.PFId
                             select new EquityDto{
-                                SID = d1.SID,
                                 SecurityName = d1.SecurityName,
                                 SecurityDescription = d1.SecurityDescription,
                                 PriceCurrency = d2.PriceCurrency,
                                 SharesOutstanding = d2.SharesOutstanding,
                                 OpenPrice = d3.OpenPrice,
-                                ClosePrice = d3.ClosePrice
+                                ClosePrice = d3.ClosePrice,
+                                DeclaredDate = d4.DeclaredDate,
+                                PFCreditRating = d5.PFCreditRating
                             };
 
             return query;   
