@@ -13,7 +13,7 @@ namespace SRMWebApiApp.Services {
         async Task<IEnumerable<EquityDto>> IEquityService.GetEquityData()
         {
              var SecuritySummariesData =   await _context.SecuritySummaries
-                            .Where(s => s.IsActive.Equals(true))
+                            .Where(s => s.IsActive.Equals(true) && s.SecurityType != null && s.SecurityType.Equals("Equity"))
                             .Select(s => new SecuritySummaryDto(){
                                 SID = s.SID,
                                 SecurityName = s.SecurityName,

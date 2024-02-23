@@ -1,6 +1,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using SRMWebApiApp.Data;
+using SRMWebApiApp.Dtos;
 using SRMWebApiApp.Services;
 
 namespace SRMWebApiApp;
@@ -24,6 +25,7 @@ public class Program
         });
         // dependency injection 
         builder.Services.AddScoped<IEquityService, EquityServiceImpl>();
+        builder.Services.AddScoped<IBondService, BondServiceImpl>();
         
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
