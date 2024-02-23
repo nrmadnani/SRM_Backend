@@ -4705,19 +4705,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\nrmadnani\\.nuget\\packages\\": {}
+    "C:\\Users\\ysbavishi\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\nrmadnani\\CASE STUDY\\SRMWebApi\\SRMWebApiApp\\SRMWebApiApp.csproj",
+      "projectUniqueName": "C:\\Users\\ysbavishi\\Documents\\Case Study\\Security Master\\SRM_Backend\\SRMWebApiApp.csproj",
       "projectName": "SRMWebApiApp",
-      "projectPath": "C:\\Users\\nrmadnani\\CASE STUDY\\SRMWebApi\\SRMWebApiApp\\SRMWebApiApp.csproj",
-      "packagesPath": "C:\\Users\\nrmadnani\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\nrmadnani\\CASE STUDY\\SRMWebApi\\SRMWebApiApp\\obj\\",
+      "projectPath": "C:\\Users\\ysbavishi\\Documents\\Case Study\\Security Master\\SRM_Backend\\SRMWebApiApp.csproj",
+      "packagesPath": "C:\\Users\\ysbavishi\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\ysbavishi\\Documents\\Case Study\\Security Master\\SRM_Backend\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\nrmadnani\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\ysbavishi\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
