@@ -1,6 +1,9 @@
 using SRMWebApiApp.Data;
 using SRMWebApiApp.Dtos;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http.HttpResults;
+using System.Web.Http.Results;
 
 namespace SRMWebApiApp.Services {
     public class BondServiceImpl : IBondService
@@ -10,10 +13,96 @@ namespace SRMWebApiApp.Services {
         public BondServiceImpl(IVP_3308_v3Context context) {
             _context = context;
         }
+
+        async Task<BondDto?> IBondService.DeleteBond(int id)
+        {
+            var deletedEntity = await _context.SecuritySummaries.FindAsync(id);
+            if (deletedEntity is not null){
+                var bondResult = await this.GetBond(id);
+                deletedEntity.IsActive = false;
+                await _context.SaveChangesAsync();
+                return bondResult;
+            }
+            
+            return null;
+            
+
+        }
+
+        async Task<BondDto?> GetBond(int id){
+            var securitySummariesData =  await _context.SecuritySummaries
+                            .Where(s => s.IsActive.Equals(true) && s.SecurityType != null && s.SecurityType.Equals("Bond") && s.SID == id)
+                            .Select(s => new SecuritySummaryDto(){
+                                SID = s.SID,
+                                SecurityName = s.SecurityName,
+                                SecurityDescription = s.SecurityDescription
+                            })
+                            .FirstOrDefaultAsync();
+
+            if(securitySummariesData is not null){
+                var bondDetailsData =  await _context.SecurityDetailsBonds
+                        .Where(s=> s.SID == id)
+                            .Select(s => new SecurityDetailsBondDto(){
+                                SID = id,
+                                CouponRate = s.CouponRate,
+                                IsCallable = s.IsCallable,
+                                MaturityDate = s.MaturityDate,
+                                PenultimateCouponDate = s.PenultimateCouponDate
+                            }).FirstOrDefaultAsync();
+                
+                var regulatoryData =  await _context.RegulatoryDetails
+                            .Where(r => r.PFId == id)
+                            .Select(r => new RegulatoryDetailDto(){
+                                PFId = id,
+                                PFCreditRating = r.PFCreditRating
+                            })
+                            .FirstOrDefaultAsync();
+
+                var pricingDetailsData =  await _context.PricingDetails
+                            .Where(p=> p.SID == id)
+                            .Select(p => new PricingDetailsDto(){
+                                SID = p.SID,
+                                AskPrice = p.AskPrice,
+                                BidPrice = p.BidPrice
+                            })
+                            .FirstOrDefaultAsync();
+
+                if (bondDetailsData != null && regulatoryData != null && pricingDetailsData != null){
+                    return new BondDto{
+                        SecurityName = securitySummariesData.SecurityName,
+                        SecurityDescription = securitySummariesData.SecurityDescription,
+                        CouponRate = bondDetailsData.CouponRate,
+                        IsCallable = bondDetailsData.IsCallable,
+                        MaturityDate = bondDetailsData.MaturityDate,
+                        PenultimateCouponDate = bondDetailsData.PenultimateCouponDate,
+                        PFCreditRating = regulatoryData.PFCreditRating,
+                        AskPrice = pricingDetailsData.AskPrice,
+                        BidPrice = pricingDetailsData.BidPrice
+                    };
+                }
+            }
+            return null;
+        }
+
+        async Task<bool> IBondService.DeleteBondById(int id)
+        {
+            var deletedSecurity = await _context.SecuritySummaries.FindAsync(id);
+            if (deletedSecurity is null){
+                return false;
+            }
+            if (deletedSecurity.SecurityType == "Bond"){
+                deletedSecurity.IsActive = false;
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
+           
+        }
+
         async Task<IEnumerable<BondDto>> IBondService.GetBondData()
         {
             var SecuritySummariesData =  await _context.SecuritySummaries
-                            .Where(s => s.IsActive.Equals(true) && s.SecurityType != null && s.SecurityType.Equals("Bonds"))
+                            .Where(s => s.IsActive.Equals(true) && s.SecurityType != null && s.SecurityType.Equals("Bond"))
                             .Select(s => new SecuritySummaryDto(){
                                 SID = s.SID,
                                 SecurityName = s.SecurityName,
@@ -69,6 +158,11 @@ namespace SRMWebApiApp.Services {
             
             return query;
                 
+        }
+
+        Task<BondDto?> IBondService.GetBond(int id)
+        {
+            return this.GetBond(id);
         }
     }
 }

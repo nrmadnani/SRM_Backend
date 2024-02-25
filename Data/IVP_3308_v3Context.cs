@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using SRMWebApiApp.Dtos;
 using SRMWebApiApp.Models;
 
 namespace SRMWebApiApp.Data;
@@ -132,4 +133,5 @@ public partial class IVP_3308_v3Context : DbContext
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
 }

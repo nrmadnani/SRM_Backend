@@ -27,5 +27,45 @@ namespace SRMWebApiApp.Controllers{
             
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetEquity(int id){
+            try{
+                var result = await _equityService.GetEquity(id);
+                return Ok(result);
+            }catch(Exception ex){
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteEquityById(int id){
+            try{
+                var deletedStatus = await _equityService.DeleteEquityById(id);
+                if(deletedStatus)
+                    return Ok("Data deleted");
+                else 
+                    return BadRequest("Data not deleted");
+            }
+            catch(Exception ex){
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("entity/{id}")]
+        public async Task<ActionResult> DeleteBond(int id){
+            try{
+                var deletedEntity = await _equityService.DeleteEquity(id);
+                if (deletedEntity != null){
+                    return Ok(deletedEntity);
+                }
+                else {
+                    return BadRequest("Data does not exist");
+                }
+            }catch(Exception ex){
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }

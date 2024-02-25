@@ -10,6 +10,99 @@ namespace SRMWebApiApp.Services {
             _context = context;
         }
 
+        async Task<EquityDto?> IEquityService.DeleteEquity(int id)
+        {
+            var deletedEntity = await _context.SecuritySummaries.FindAsync(id);
+            if (deletedEntity is not null){
+                var equityResult = await this.GetEquity(id);
+                deletedEntity.IsActive = false;
+                await _context.SaveChangesAsync();
+                return equityResult;
+            }
+            
+            return null;
+        }
+
+        async Task<EquityDto?> GetEquity(int id){
+            var securitySummariesData =  await _context.SecuritySummaries
+                            .Where(s => s.IsActive.Equals(true) && s.SecurityType != null && s.SecurityType.Equals("Equity") && s.SID == id)
+                            .Select(s => new SecuritySummaryDto(){
+                                SID = s.SID,
+                                SecurityName = s.SecurityName,
+                                SecurityDescription = s.SecurityDescription
+                            })
+                            .FirstOrDefaultAsync();
+            
+            if(securitySummariesData is not null){
+                var securityDetailsEquitiesData = await _context.SecurityDetailsEquities
+                            .Where(s=> s.SID == id)
+                            .Select(s => new SecurityDetailsEquityDto(){
+                                SID = s.SID,
+                                PriceCurrency = s.PriceCurrency,
+                                SharesOutstanding = s.SharesOutstanding
+                            }).FirstOrDefaultAsync();
+            
+                var pricingDetailsData = await _context.PricingDetails
+                            .Where(s=> s.SID == id)
+                            .Select(p => new PricingDetailsDto(){
+                                SID = p.SID,
+                                OpenPrice = p.OpenPrice,
+                                ClosePrice = p.ClosePrice
+                            }).FirstOrDefaultAsync();
+
+                var dividendHistoriesData = await _context.DividendHistories
+                            .Where(s=> s.SID == id)                    
+                            .Select(d => new DividendHistoryDto(){
+                                SID = d.SID,
+                                DeclaredDate = d.DeclaredDate
+                            }).FirstOrDefaultAsync();
+            
+                var regulatoryDetailsData = await _context.RegulatoryDetails
+                            .Where(r=> r.PFId == id)
+                            .Select(r => new RegulatoryDetailDto(){
+                                PFId = r.PFId,
+                                PFCreditRating = r.PFCreditRating
+                            }).FirstOrDefaultAsync();
+
+                if (securityDetailsEquitiesData!= null && pricingDetailsData!=null && dividendHistoriesData != null && regulatoryDetailsData !=null){
+                    return new EquityDto{
+                            SecurityName = securitySummariesData.SecurityName,
+                            SecurityDescription = securitySummariesData.SecurityDescription,
+                            PriceCurrency = securityDetailsEquitiesData.PriceCurrency,
+                            SharesOutstanding = securityDetailsEquitiesData.SharesOutstanding,
+                            OpenPrice = pricingDetailsData.OpenPrice,
+                            ClosePrice = pricingDetailsData.ClosePrice,
+                            DeclaredDate = dividendHistoriesData.DeclaredDate,
+                            PFCreditRating = regulatoryDetailsData.PFCreditRating
+                    };
+                }
+                else{
+                    return null;
+                }
+            }
+
+            return null;
+        }
+
+        async Task<bool> IEquityService.DeleteEquityById(int id)
+        {
+            var deletedSecurity = await _context.SecuritySummaries.FindAsync(id);
+            if (deletedSecurity is null){
+                return false;
+            }
+            if (deletedSecurity.SecurityType == "Equity"){
+                deletedSecurity.IsActive = false;
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
+
+        Task<EquityDto?> IEquityService.GetEquity(int id)
+        {
+            return this.GetEquity(id);
+        }
+
         async Task<IEnumerable<EquityDto>> IEquityService.GetEquityData()
         {
              var SecuritySummariesData =   await _context.SecuritySummaries
