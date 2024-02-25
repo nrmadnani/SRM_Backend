@@ -60,6 +60,7 @@ namespace SRMWebApiApp.Services {
                             join d5 in RegulatoryDetailsData
                             on d1.SID equals d5.PFId
                             select new EquityDto{
+                                SID = d1.SID,
                                 SecurityName = d1.SecurityName,
                                 SecurityDescription = d1.SecurityDescription,
                                 PriceCurrency = d2.PriceCurrency,

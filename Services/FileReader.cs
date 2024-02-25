@@ -60,7 +60,7 @@ namespace SRMWebApiApp.Services {
     // Inserting for SecuritySummary
     var resetSSId = _context.Database.ExecuteSqlRaw("DBCC CHECKIDENT('SecuritySummary', RESEED, 0)");
     var resetSSEId = _context.Database.ExecuteSqlRaw("DBCC CHECKIDENT('SecuritySummaryEquity', RESEED, 0)");
-    var resetSSBId = _context.Database.ExecuteSqlRaw("DBCC CHECKIDENT('SecuritySummaryBonds', RESEED, 0)");
+    var resetSSBId = _context.Database.ExecuteSqlRaw("DBCC CHECKIDENT('SecuritySummaryBonds', RESEED, 10)");
     var resetSSINFO = _context.Database.ExecuteSqlRaw("DBCC CHECKIDENT('SecurityDetailsEquity', RESEED, 0)");
     var resetSEID = _context.Database.ExecuteSqlRaw("DBCC CHECKIDENT('SecurityIdentifier', RESEED, 0)");
     var resetER = _context.Database.ExecuteSqlRaw("DBCC CHECKIDENT('EquityRisk', RESEED, 0)");
@@ -68,10 +68,10 @@ namespace SRMWebApiApp.Services {
     var resetRef = _context.Database.ExecuteSqlRaw("DBCC CHECKIDENT('ReferenceData', RESEED, 0)");
     var resetPrice =_context.Database.ExecuteSqlRaw("DBCC CHECKIDENT('PricingDetails', RESEED, 0)"); 
     var resetDiv =_context.Database.ExecuteSqlRaw("DBCC CHECKIDENT('DividendHistory', RESEED, 0)"); 
-    var resetSSBondDe = _context.Database.ExecuteSqlRaw("DBCC CHECKIDENT('SecurityDetailsBonds', RESEED, 0)");
-    var resetBondRisk = _context.Database.ExecuteSqlRaw("DBCC CHECKIDENT('BondRisk', RESEED, 0)");
-    var resetCallSchedule = _context.Database.ExecuteSqlRaw("DBCC CHECKIDENT('CallSchedule', RESEED, 0)");
-    var resetPutSchedule = _context.Database.ExecuteSqlRaw("DBCC CHECKIDENT('PutSchedule', RESEED, 0)");
+    var resetSSBondDe = _context.Database.ExecuteSqlRaw("DBCC CHECKIDENT('SecurityDetailsBonds', RESEED, 10)");
+    var resetBondRisk = _context.Database.ExecuteSqlRaw("DBCC CHECKIDENT('BondRisk', RESEED,10)");
+    var resetCallSchedule = _context.Database.ExecuteSqlRaw("DBCC CHECKIDENT('CallSchedule', RESEED, 10)");
+    var resetPutSchedule = _context.Database.ExecuteSqlRaw("DBCC CHECKIDENT('PutSchedule', RESEED, 10)");
 
     for (int row = 2; row <= equityRowRount; row++)
         {
@@ -232,7 +232,7 @@ namespace SRMWebApiApp.Services {
             bondSummary.SecurityName = (string) bondSheet.Cells[row, 3].Value ?? null;
             bondSummary.SecurityType = "Bond";
             bondSummary.HasPosition = (bool?) bondSheet.Cells[row, 30].Value ?? null;
-            bondSummary.IsActive = null;
+            bondSummary.IsActive = true;
             _context.Add(bondSummary);
             await _context.SaveChangesAsync();
 
@@ -422,8 +422,8 @@ namespace SRMWebApiApp.Services {
                 await _context.SaveChangesAsync();
 
             var callobj = new CallSchedule();
-            callobj.CallPrice = (double?) bondSheet.Cells[row,63].Value ?? null;
-            var callDate = (double?) bondSheet.Cells[row,62].Value ?? null;
+            callobj.CallPrice = (double?) bondSheet.Cells[row,64].Value ?? null;
+            var callDate = (double?) bondSheet.Cells[row,63].Value ?? null;
             if (callDate == null) {
                 callobj.CallDate = null;
             } else {
@@ -436,17 +436,19 @@ namespace SRMWebApiApp.Services {
                 await _context.SaveChangesAsync();
 
                 var priceObj = new PricingDetail();
-                var storeDeci = (double ?) bondSheet.Cells[row, 55].Value;
+                var storeDeci = (double ?) bondSheet.Cells[row, 56].Value;
+                Console.WriteLine(bondSheet.Cells[1, 56].Value.ToString());
                 if (storeDeci == null) {
                     priceObj.AskPrice = null;
                 } else {
                     decimal x = (decimal) storeDeci;
+                    Console.WriteLine("BBBBBUUUGGGG " + x);
                     priceObj.AskPrice = x;
                 }
-                priceObj.HighPrice = (double?) bondSheet.Cells[row, 56].Value ?? null;
-                priceObj.LowPrice = (double?) bondSheet.Cells[row,57].Value ?? null;
-                priceObj.OpenPrice = (double?) bondSheet.Cells[row,58].Value ?? null;
-                var store = (double?) bondSheet.Cells[row,59].Value ?? null;
+                priceObj.HighPrice = (double?) bondSheet.Cells[row, 57].Value ?? null;
+                priceObj.LowPrice = (double?) bondSheet.Cells[row,58].Value ?? null;
+                priceObj.OpenPrice = (double?) bondSheet.Cells[row,59].Value ?? null;
+                var store = (double?) bondSheet.Cells[row,60].Value ?? null;
                 if (store == null) {
                     priceObj.Volume = null;
                 } else {
@@ -455,8 +457,10 @@ namespace SRMWebApiApp.Services {
                 }
                 // priceObj.Volume = (int?) worksheet.Cells[row,52].Value ?? null;
                 // priceObj.AskPrice = (decimal?) worksheet.Cells[row,54].Value; 
-                priceObj.BidPrice = (double?) bondSheet.Cells[row,60].Value ?? null;
-                priceObj.LastPrice = (double?) bondSheet.Cells[row,61].Value ?? null;
+                priceObj.BidPrice = (double?) bondSheet.Cells[row,61].Value ?? null;
+                Console.WriteLine(bondSheet.Cells[1,61].Value.ToString()) ;
+                Console.WriteLine("PHEEEEWW " + priceObj.BidPrice.ToString());
+                priceObj.LastPrice = (double?) bondSheet.Cells[row,62].Value ?? null;
                 _context.Add(priceObj);
                 await _context.SaveChangesAsync();
 
