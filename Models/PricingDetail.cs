@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SRMWebApiApp.Models;
 
+// partial commit
 public partial class PricingDetail
 {
     [Key]
