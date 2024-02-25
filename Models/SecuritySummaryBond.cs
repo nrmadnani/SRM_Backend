@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SRMWebApiApp.Models;
 
-[Keyless]
 public partial class SecuritySummaryBond
 {
     public int? SecId { get; set; }
@@ -23,6 +22,10 @@ public partial class SecuritySummaryBond
     [Unicode(false)]
     public string? AssetType { get; set; }
 
+    [Key]
+    [Column("SID")]
+    public int Sid { get; set; }
+
     [ForeignKey("SecId")]
-    public virtual SecuritySummary? Sec { get; set; }
+    public virtual SecuritySummary? Sec {get; set;}
 }

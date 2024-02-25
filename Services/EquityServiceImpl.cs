@@ -1,6 +1,8 @@
 using SRMWebApiApp.Dtos;
 using SRMWebApiApp.Data;
 using Microsoft.EntityFrameworkCore;
+using SRMWebApiApp.Models;
+using System.Xml.Serialization;
 namespace SRMWebApiApp.Services {
     public class EquityServiceImpl : IEquityService
     {

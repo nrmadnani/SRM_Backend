@@ -80,10 +80,6 @@ public partial class IVP_3308_v3Context : DbContext
             entity.HasKey(e => e.SID).HasName("PK__PutSched__CA1959700698C3CC");
         });
 
-        modelBuilder.Entity<ReferenceDatum>(entity =>
-        {
-            entity.HasOne(d => d.SIDNavigation).WithMany().HasConstraintName("FK_SID_ReferenceData");
-        });
 
         modelBuilder.Entity<RegulatoryDetail>(entity =>
         {

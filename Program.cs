@@ -24,6 +24,7 @@ public class Program
         });
         // dependency injection 
         builder.Services.AddScoped<IEquityService, EquityServiceImpl>();
+        builder.Services.AddScoped<IFileReadService, FileReader>();
         
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

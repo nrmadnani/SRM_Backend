@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SRMWebApiApp.Models;
 
-[Keyless]
 [Table("SecuritySummaryEquity")]
 public partial class SecuritySummaryEquity
 {
@@ -14,6 +13,11 @@ public partial class SecuritySummaryEquity
 
     public int? RoundLotSize { get; set; }
 
+    [Key]
+    [Column("SID")]
+    public int Sid { get; set; }
+
     [ForeignKey("SecId")]
-    public virtual SecuritySummary? Sec { get; set; }
+    public virtual SecuritySummary? Sec {get; set;}
+
 }

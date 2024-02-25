@@ -6,11 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SRMWebApiApp.Models;
 
-[Keyless]
 public partial class ReferenceDatum
 {
-    public int? SID { get; set; }
-
     [StringLength(50)]
     [Unicode(false)]
     public string? IssueCountry { get; set; }
@@ -51,6 +48,7 @@ public partial class ReferenceDatum
     [Unicode(false)]
     public string? RiskCurrency { get; set; }
 
-    [ForeignKey("SID")]
-    public virtual SecuritySummary? SIDNavigation { get; set; }
+    [Key]
+    [Column("RfID")]
+    public int RfId { get; set; }
 }
