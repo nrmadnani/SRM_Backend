@@ -3,6 +3,7 @@ using SRMWebApiApp.Data;
 using Microsoft.EntityFrameworkCore;
 using SRMWebApiApp.Models;
 using System.Xml.Serialization;
+using Microsoft.EntityFrameworkCore.Migrations.Operations;
 namespace SRMWebApiApp.Services {
     public class EquityServiceImpl : IEquityService
     {
@@ -60,7 +61,7 @@ namespace SRMWebApiApp.Services {
                             join d5 in RegulatoryDetailsData
                             on d1.SID equals d5.PFId
                             select new EquityDto{
-                                SID = d1.SID,
+                                id = d1.SID,
                                 SecurityName = d1.SecurityName,
                                 SecurityDescription = d1.SecurityDescription,
                                 PriceCurrency = d2.PriceCurrency,
@@ -74,5 +75,27 @@ namespace SRMWebApiApp.Services {
             return query;   
         
         }
+
+        //async Task<UpdateEquityDTO> UpdateEquityData(UpdateEquityDTO dto) {
+        public async Task<UpdateEquityDTO> UpdateEquityData(UpdateEquityDTO dto){
+            var SecuritySummaryData = _context.SecuritySummaries.FirstOrDefault(x => x.SID == dto.SID);
+            var SecurityEquityDetailsData = _context.SecurityDetailsEquities.FirstOrDefault(x => x.SID == dto.SID);
+            var PricingDetailsData = _context.PricingDetails.FirstOrDefault(x => x.SID == dto.SID);
+            var DividendHistoryData = _context.DividendHistories.FirstOrDefault(x => x.SID == dto.SID);
+            var RegulatoryDetailsData = _context.RegulatoryDetails.FirstOrDefault(x => x.PFId == dto.SID);
+
+            SecuritySummaryData.SecurityDescription = dto.SecurityDescription;
+            SecurityEquityDetailsData.PriceCurrency = dto.PricingCurrency;
+            PricingDetailsData.OpenPrice = dto.OpenPrice;
+            PricingDetailsData.ClosePrice = dto.ClosePrice;
+            Console.WriteLine(dto.DividendDeclaredDate.ToString() + " SSSSSSSSSS");
+            DividendHistoryData.DeclaredDate = DateOnly.Parse(dto.DividendDeclaredDate);
+            RegulatoryDetailsData.PFCurrency = dto.PFCreditRating;
+            await _context.SaveChangesAsync();
+
+            return dto;
+
+        }
+
     }
 }

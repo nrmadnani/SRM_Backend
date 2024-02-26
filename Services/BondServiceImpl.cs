@@ -54,7 +54,7 @@ namespace SRMWebApiApp.Services {
                                              join d4 in PricingDetailsData
                                              on d1.SID equals d4.SID
                                             select new BondDto {
-                                                SID = d1.SID,
+                                                id = d1.SID,
                                                 SecurityName = d1.SecurityName,
                                                 SecurityDescription = d1.SecurityDescription,
                                                 CouponRate = d2.CouponRate,

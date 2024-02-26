@@ -1,6 +1,6 @@
 namespace SRMWebApiApp.Dtos {
     public class BondDto{
-        public int SID { get; set; }
+        public int id { get; set; }
         public string? SecurityName { get; set; }
         public string? SecurityDescription { get; set; }
         public bool? IsCallable { get; set; }

@@ -1,5 +1,6 @@
 using System.Collections;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using SRMWebApiApp.Dtos;
 using SRMWebApiApp.Services;
 
@@ -25,6 +26,16 @@ namespace SRMWebApiApp.Controllers{
                 return BadRequest(e.Message);
             }
             
+        }
+
+        [HttpPut]
+        public async Task<ActionResult> PutEquityData([FromBody] UpdateEquityDTO dto){
+            try{
+                var result = await _equityService.UpdateEquityData(dto);
+                return Ok("Hello");
+            } catch (Exception e) {
+                return BadRequest(e.Message);
+            }
         }
 
     }

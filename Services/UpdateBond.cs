@@ -22,7 +22,8 @@ namespace SRMWebApiApp.Services {
             Console.WriteLine("HELLO");
             SecurityDetailsBondData.CouponRate = dto.CouponRate;
             Console.Write("DONEEEEE life");
-            SecurityDetailsBondData.IsCallable = dto.isCallable;
+            SecurityDetailsBondData.IsCallable = Boolean.Parse(dto.isCallable);
+            SecurityDetailsBondData.PenultimateCouponDate = DateOnly.Parse(dto.PenultimateCouponDate);
             // SecurityDetailsBondData.MaturityDate = dto.MaturityDate;
             SecurityDetailsBondData.MaturityDate = DateOnly.FromDateTime(DateTime.Now);
             Console.Write("DONEEEEE adasd");
@@ -34,9 +35,5 @@ namespace SRMWebApiApp.Services {
             await _context.SaveChangesAsync();
             return dto;
         }
-
-        public async void SADLIFE(int reqSID) {
-        }
-
     }
 }
