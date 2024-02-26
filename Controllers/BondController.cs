@@ -25,5 +25,6 @@ namespace SRMWebApiApp.Controllers {
                 return BadRequest(ex.Message);
             }
         }
+
     }
 }
