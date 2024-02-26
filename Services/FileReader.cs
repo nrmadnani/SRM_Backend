@@ -29,24 +29,6 @@ namespace SRMWebApiApp.Services {
 // using (FileStream fileStream = new FileStream(@"C:\Users\ysbavishi\Documents\Case Study\Security Master\SRM_Backend\File\Data for securities.xlsx", FileMode.Open)){
     ExcelPackage excel = new ExcelPackage(file);
     ExcelWorksheet worksheet = excel.Workbook.Worksheets[0];
-    // int colCount = worksheet.Dimension.End.Column;
-    // int rowCount = worksheet.Dimension.End.Row;
-    // Console.WriteLine(colCount.ToString());
-    // Console.WriteLine(rowCount.ToString());
-    // Console.WriteLine(worksheet.Cells[15,2].Value.ToString());
-    // DateTime a = (DateTime) worksheet.Cells[2,57].Value;
-    // Console.WriteLine(a.ToString());
-    // var lastRow = worksheet.Cells.Where(cell => !string.IsNullOrEmpty(cell.Value?.ToString() ?? string.Empty)).LastOrDefault().End.Row;
-    // Console.WriteLine(lastRow);
-    /*
-    for (int row = 1; row <= rowCount; row++)
-        {
-            for (int col = 1; col <= colCount; col++)
-            {
-                Console.WriteLine(" Row:" + row + " column:" + col + " Value:" + worksheet.Cells[row, col].Value.ToString().Trim());
-            }
-        }
-    */
 
     // Trying to put call schedule
     ExcelWorksheet bondSheet = excel.Workbook.Worksheets[1];
@@ -255,10 +237,7 @@ namespace SRMWebApiApp.Services {
             bondSecIdObj.BloombergTickerAndExchange = null;
             _context.Add(bondSecIdObj);
             await _context.SaveChangesAsync();
-            Console.WriteLine("DDDDDDDDDDDDDDDDDDDDDDDDDDD");
             var bondSecDetails = new SecurityDetailsBond();
-            // bondSecDetails = 
-            Console.WriteLine(bondSheet.Cells[1,13].Value.ToString());
             var test = (double?) bondSheet.Cells[row,13].Value ?? null;
             if (test == null) {
                 bondSecDetails.FirstCouponDate = null;
@@ -280,7 +259,6 @@ namespace SRMWebApiApp.Services {
             // bondSecDetails.CouponFrequency = (int?) bondSheet.Cells[row,16].Value ?? null;
             bondSecDetails.CouponRate = (double?) bondSheet.Cells[row,17].Value ?? null;
             bondSecDetails.CouponType = (string?) bondSheet.Cells[row,18].Value ?? null;
-            Console.WriteLine("You Caught me");
             var isCall = (string?) bondSheet.Cells[row,20].Value ?? null;
             if (isCall == null) {
                 bondSecDetails.IsCallable = null;
@@ -288,7 +266,6 @@ namespace SRMWebApiApp.Services {
                 bool obj = Boolean.Parse(isCall);
                 bondSecDetails.IsCallable = obj;
             }
-            Console.WriteLine("I AM DONE");
             // bondSecDetails.IsCallable = (bool?) bondSheet.Cells[row,20].Value ?? null;
             var isFloat = (string?) bondSheet.Cells[row,21].Value ?? null;
             if (isFloat == null) {
@@ -297,7 +274,6 @@ namespace SRMWebApiApp.Services {
                 bool obj = Boolean.Parse(isFloat);
                 bondSecDetails.IsFixToFloat = obj;
             }
-            Console.WriteLine("I AM DONE TOOOO");
             // bondSecDetails.IsFixToFloat = (bool?) bondSheet.Cells[row,21].Value ?? null;
             var isPut = (string?) bondSheet.Cells[row,22].Value ?? null;
             if (isPut == null) {
@@ -437,12 +413,10 @@ namespace SRMWebApiApp.Services {
 
                 var priceObj = new PricingDetail();
                 var storeDeci = (double ?) bondSheet.Cells[row, 56].Value;
-                Console.WriteLine(bondSheet.Cells[1, 56].Value.ToString());
                 if (storeDeci == null) {
                     priceObj.AskPrice = null;
                 } else {
                     decimal x = (decimal) storeDeci;
-                    Console.WriteLine("BBBBBUUUGGGG " + x);
                     priceObj.AskPrice = x;
                 }
                 priceObj.HighPrice = (double?) bondSheet.Cells[row, 57].Value ?? null;
@@ -458,8 +432,6 @@ namespace SRMWebApiApp.Services {
                 // priceObj.Volume = (int?) worksheet.Cells[row,52].Value ?? null;
                 // priceObj.AskPrice = (decimal?) worksheet.Cells[row,54].Value; 
                 priceObj.BidPrice = (double?) bondSheet.Cells[row,61].Value ?? null;
-                Console.WriteLine(bondSheet.Cells[1,61].Value.ToString()) ;
-                Console.WriteLine("PHEEEEWW " + priceObj.BidPrice.ToString());
                 priceObj.LastPrice = (double?) bondSheet.Cells[row,62].Value ?? null;
                 _context.Add(priceObj);
                 await _context.SaveChangesAsync();
@@ -468,63 +440,8 @@ namespace SRMWebApiApp.Services {
             Console.WriteLine(test);
         }
 
-/*
-dotnet-ef dbcontext scaffold "Server=192.168.0.13\sqlexpress,49753;Database=IVP_3308_v3;TrustServerCertificate=True;user id=sa; password=sa@12345678" Microsoft.EntityFrameworkCore.SqlServer --context-dir Data --output-dir Models Tables SecuritySummaryEquity --data-annotations
-
-*/
 
     return new CallSchedule();
         }
     }
 }
-    /*
-    var something =   bondSheet.Cells[2,63].Text;
-    DateOnly dat = DateOnly.Parse(something);
-    var price = (double) bondSheet.Cells[2,64].Value;
-    Console.WriteLine(price);
-    var obj = new CallSchedule();
-    obj.CallDate = dat;
-    obj.CallPrice = price;
-    _context.CallSchedules.Add(obj);
-    await _context.SaveChangesAsync();
-    // var blob = bondSheet.Cells[4,63] ?? string.Empty;
-    if(bondSheet.Cells[4,63].Value == null) {
-        Console.WriteLine("CONFIRMING GOD");
-    } else {
-        Console.WriteLine("DEVIl");
-    };
-    Console.WriteLine("Done");
-    for (int row = 1; row <= bondRowCount; row++)
-        {
-            for (int col = 63; col <= bondColCount; col++)
-            {
-                Console.WriteLine(" Row:" + row + " column:" + col + " Value:" + bondSheet.Cells[row, col].Value.ToString().Trim());
-            }
-        }
-    return obj;
-    return new CallSchedule();
-        }
-    }
-}
-
-/*
-using (var reader = new StreamReader(@"C:\Users\ysbavishi\Documents\Case Study\Security Master\SRM_Backend\File\20201231-20211231 S_P 500 Prices.csv"))
-using(var csv = new CsvReader(reader, CultureInfo.InvariantCulture)) {
-    // var header = csv.ReadHeader();
-    // Console.WriteLine(header);
-    
-    while(csv.Read()) {
-        Console.WriteLine(csv.GetField<String>(1));
-    }
-}
-
-
-using (var reader = new CsvReader(new ExcelParser(@"C:\Users\ysbavishi\Documents\Case Study\Security Master\SRM_Backend\File\Data for securities.xlsx"))){
-    var header = reader.Read();
-    Console.WriteLine(header);
-}
-*/
-
-
-
-//}

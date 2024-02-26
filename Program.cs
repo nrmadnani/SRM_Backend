@@ -27,7 +27,7 @@ public class Program
         builder.Services.AddScoped<IBondService, BondServiceImpl>();
         builder.Services.AddScoped<IFileReadService, FileReader>();
         builder.Services.AddScoped<IUpdateBondService, UpdateBond>();
-        
+        builder.Services.AddScoped<IUtilityService, UtilityServiceImpl>(); 
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();

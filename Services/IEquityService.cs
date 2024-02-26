@@ -3,6 +3,9 @@ using SRMWebApiApp.Dtos;
 namespace SRMWebApiApp.Services {
     public interface IEquityService {
         Task<IEnumerable<EquityDto>> GetEquityData();
-        public Task<UpdateEquityDTO> UpdateEquityData(UpdateEquityDTO dto);
+
+        Task<bool> DeleteEquityById(int id);
+        Task<EquityDto?> DeleteEquity(int id);
+        Task<EquityDto?> GetEquity(int id);
     }
 }
